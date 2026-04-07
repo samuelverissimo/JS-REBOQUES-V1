@@ -576,7 +576,7 @@
             <p><strong>Acessórios</strong></p>
             {% for accessory in accessories %}
                 {% if accessory.name != 'Eixo adicional' or product.category == 'Reboque Padrão' %}
-                <div class="accessory-row" {% if accessory.name == 'Eixo adicional' %}id="eixo-adicional-row" style="display: none;"{% endif %}>
+                <div class="accessory-row" {% if accessory.name == 'Eixo adicional' %}id="eixo-adicional-row"{% endif %}>
                     <label>
                         <input type="checkbox" name="accessory" value="{{ accessory.name }}" data-price="{{ accessory.price }}" {% if accessory.name == 'Eixo adicional' %}id="eixo-adicional-checkbox"{% endif %}>
                         {{ accessory.name }} — {{ accessory.price }}<br>
