@@ -1,0 +1,901 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.title }} - JS REBOQUES</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header styles */
+        header {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            color: #ffffff;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            width: 300px;
+            height: auto;
+            max-width: 100%;
+            margin-bottom: 1rem;
+            filter: brightness(1.1);
+        }
+
+        nav {
+            margin-top: 1rem;
+        }
+
+        nav a {
+            color: #cccccc;
+            text-decoration: none;
+            margin: 0 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Product detail section */
+        .product-detail {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .product-detail img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .product-detail img:hover {
+            transform: scale(1.02);
+        }
+
+        .product-detail h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin: 2rem 0 1rem 0;
+            font-weight: 700;
+            background: linear-gradient(135deg, #000000 0%, #666666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Form elements */
+        .product-detail label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #000;
+            font-size: 1.1rem;
+            text-align: left;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .product-detail select {
+            width: 100%;
+            max-width: 500px;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            background-color: #fff;
+            color: #000;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .product-detail select:focus {
+            border-color: #000;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+            outline: none;
+        }
+
+        .price {
+            font-weight: 700;
+            color: #000;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin: 2rem 0;
+            background: linear-gradient(135deg, #000000 0%, #666666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .product-detail p,
+        .product-detail ul {
+            color: #666;
+            line-height: 1.7;
+            text-align: left;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .product-detail ul {
+            padding-left: 2rem;
+        }
+
+        .product-detail ul li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .product-detail ul li::before {
+            content: '•';
+            color: #000;
+            font-weight: bold;
+            position: absolute;
+            left: -1.5rem;
+        }
+
+        /* Accessories section */
+        .accessories-list {
+            border: 2px solid #e0e0e0;
+            padding: 2rem;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+            max-width: 800px;
+            margin: 2rem auto;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .accessories-list p {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #000;
+        }
+
+        .accessory-row {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 15px;
+            background: #fff;
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .accessory-row:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .accessory-row label {
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .accessory-row input[type="checkbox"] {
+            margin: 0;
+            width: 20px;
+            height: 20px;
+            accent-color: #000;
+        }
+
+        .accessory-row small {
+            display: block;
+            color: #888;
+            margin-top: 0.5rem;
+            font-weight: 400;
+        }
+
+        /* Payment options */
+        .payment-options {
+            border: 2px solid #e0e0e0;
+            padding: 2rem;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+            max-width: 800px;
+            margin: 2rem auto;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .payment-options p {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #000;
+        }
+
+        .payment-options label {
+            display: block;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            padding: 0.5rem;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-options label:hover {
+            background-color: #f0f0f0;
+        }
+
+        .payment-options input[type="radio"] {
+            margin-right: 1rem;
+            width: 18px;
+            height: 18px;
+            accent-color: #000;
+        }
+
+        .installments {
+            margin-left: 2rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .installments label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .installments select {
+            width: 100%;
+            max-width: 200px;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+            font-family: inherit;
+        }
+
+        /* Price HUD */
+        .price-hud {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            color: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 2px solid #fff;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            color: #fff;
+            padding: 1rem 3rem;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #333333 0%, #000000 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            color: #cccccc;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1rem;
+            }
+
+            .logo {
+                width: 250px;
+            }
+
+            nav a {
+                margin: 0 1rem;
+                font-size: 0.9rem;
+            }
+
+            .product-detail {
+                padding: 3rem 1.5rem;
+            }
+
+            .product-detail img {
+                border-radius: 15px;
+            }
+
+            .product-detail h1 {
+                font-size: 2.2rem;
+            }
+
+            .product-detail select {
+                max-width: 100%;
+            }
+
+            .accessories-list,
+            .payment-options {
+                padding: 1.5rem;
+                border-radius: 15px;
+            }
+
+            .accessory-row {
+                padding: 0.8rem;
+            }
+
+            .price-hud {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.8rem 1.2rem;
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                width: 200px;
+            }
+
+            nav {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            nav a {
+                margin: 0;
+            }
+
+            .product-detail h1 {
+                font-size: 1.8rem;
+            }
+
+            .price {
+                font-size: 1.5rem;
+            }
+
+            .accessories-list,
+            .payment-options {
+                padding: 1rem;
+            }
+
+            .accessory-row label {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .price-hud {
+                position: static;
+                margin: 2rem auto 0;
+                max-width: 300px;
+            }
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+            margin: 15% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            border: 2px solid #000;
+        }
+
+        .modal-content h2 {
+            color: #000;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: inherit;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .name-input:focus {
+            border-color: #000;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+        }
+
+        .modal-btn {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn:hover {
+            background: linear-gradient(135deg, #333333 0%, #000000 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        /* Responsive modal */
+        @media (max-width: 480px) {
+            .modal-content {
+                margin: 20% auto;
+                padding: 1.5rem;
+            }
+
+            .modal-content h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{% static 'logos/logo-js.png' %}" alt="JS REBOQUES Logo" class="logo">
+        <nav>
+            <a href="{% url 'home:home' %}">Home</a>
+            <a href="#">Sobre Nós</a>
+            <a href="https://wa.me/c/558199460014">Contato</a>
+        </nav>
+    </header>
+    <section class="product-detail">
+        <img id="product-image" src="{% static product.image %}" alt="{{ product.title }}" data-standard-src="{% static product.image %}" data-trucado-src="{% static product.trucado_image|default:product.image %}">
+        <h1>{{ product.title }}</h1>
+        {% if product.sizes %}
+        <label for="size-select">Selecione o tamanho</label>
+        <select id="size-select">
+            {% for size in product.sizes %}
+            <option value="{{ size.price }}" data-label="{{ size.label }}">{{ size.label }} — {{ size.price }}</option>
+            {% endfor %}
+        </select>
+        <p id="size-display" style="font-weight: bold; margin-top: 0.5rem;"></p>
+        <p class="price" id="product-price">{{ product.sizes.0.price }}</p>
+        {% else %}
+        <p class="price" id="product-price">{{ product.price }}</p>
+        {% endif %}
+        <p>{{ product.short_description }}</p>
+        <p><strong>Categoria:</strong> {{ product.category }}</p>
+        <div class="description">
+            <p><strong>Detalhes do produto:</strong></p>
+            <ul>
+                {% for detail in product.details %}
+                <li>{{ detail }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="accessories-list">
+            <p><strong>Acessórios</strong></p>
+            {% for accessory in accessories %}
+                {% if accessory.name != 'Eixo adicional' or product.category == 'Reboque Padrão' %}
+                <div class="accessory-row" {% if accessory.name == 'Eixo adicional' %}id="eixo-adicional-row" style="display: none;"{% endif %}>
+                    <label>
+                        <input type="checkbox" name="accessory" value="{{ accessory.name }}" data-price="{{ accessory.price }}" {% if accessory.name == 'Eixo adicional' %}id="eixo-adicional-checkbox"{% endif %}>
+                        {{ accessory.name }} — {{ accessory.price }}<br>
+                        <small>{{ accessory.description }}</small>
+                    </label>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="payment-options">
+            <p><strong>Forma de Pagamento</strong></p>
+            <label>
+                <input type="radio" name="payment" value="em espécie">
+                Em espécie
+            </label>
+            <label>
+                <input type="radio" name="payment" value="à vista (débito)">
+                À vista (débito)
+            </label>
+            <label>
+                <input type="radio" name="payment" value="pix">
+                PIX
+            </label>
+            <label>
+                <input type="radio" name="payment" value="cartão de crédito">
+                Cartão de crédito
+            </label>
+            <div class="installments" id="installments-div">
+                <label>Parcelas:
+                    <select name="installments">
+                        <option value="1x">1x</option>
+                        <option value="2x">2x</option>
+                        <option value="3x">3x</option>
+                        <option value="4x">4x</option>
+                        <option value="5x">5x</option>
+                        <option value="6x">6x</option>
+                        <option value="7x">7x</option>
+                        <option value="8x">8x</option>
+                        <option value="9x">9x</option>
+                        <option value="10x">10x</option>
+                        <option value="11x">11x</option>
+                        <option value="12x">12x</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+        <a id="contact-button" href="#" onclick="showNameModal(event)" class="btn">Tenho Interesse</a>
+    </section>
+
+    <!-- Modal para nome -->
+    <div id="name-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeNameModal()">&times;</span>
+            <h2>Quase lá!</h2>
+            <p>Para personalizar sua mensagem, por favor informe seu nome:</p>
+            <input type="text" id="customer-name" placeholder="Digite seu nome" class="name-input">
+            <button onclick="sendWhatsApp()" class="modal-btn">Enviar Mensagem</button>
+        </div>
+    </div>
+
+    <div class="price-hud" id="price-hud">Preço Total: R$ 0,00</div>
+    <footer>
+        <p>&copy; 2026 JS REBOQUES. Todos os direitos reservados.</p>
+    </footer>
+    <script>
+        // Função para parsear preços em formato brasileiro
+        function parsePrice(priceStr) {
+            return parseFloat(priceStr.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        }
+
+        // Função para formatar preços em formato brasileiro
+        function formatPrice(price) {
+            return 'R$ ' + price.toFixed(2).replace('.', ',');
+        }
+
+        // Função para calcular o preço total
+        function calculateTotalPrice() {
+            let total = 0;
+            const sizeSelect = document.getElementById('size-select');
+            if (sizeSelect) {
+                total += parsePrice(sizeSelect.value);
+            } else {
+                total += parsePrice('{{ product.price }}');
+            }
+            const accessoryCheckboxes = document.querySelectorAll('input[name="accessory"]');
+            accessoryCheckboxes.forEach(cb => {
+                if (cb.checked) {
+                    total += parsePrice(cb.dataset.price);
+                }
+            });
+            return total;
+        }
+
+        // Função para atualizar o HUD de preço
+        function updatePriceHud() {
+            const total = calculateTotalPrice();
+            const priceHud = document.getElementById('price-hud');
+            priceHud.textContent = 'Preço Total: ' + formatPrice(total);
+        }
+
+        // Função para mostrar modal de nome
+        function showNameModal(event) {
+            event.preventDefault();
+            document.getElementById('name-modal').style.display = 'block';
+        }
+
+        // Função para fechar modal
+        function closeNameModal() {
+            document.getElementById('name-modal').style.display = 'none';
+            document.getElementById('customer-name').value = '';
+        }
+
+        // Função para enviar WhatsApp com nome
+        function sendWhatsApp() {
+            const nome = document.getElementById('customer-name').value.trim();
+            if (nome) {
+                const url = updateContactUrl(nome);
+                window.open(url, '_blank');
+                closeNameModal();
+            } else {
+                alert('Por favor, digite seu nome.');
+            }
+        }
+
+        // Função para atualizar a URL do WhatsApp
+        function updateContactUrl(nome = '') {
+            const contactButton = document.getElementById('contact-button');
+            const productTitle = '{{ product.title|escapejs }}';
+            let text = nome ? `Olá! Me chamo *${nome}* e tenho interesse no produto ` + productTitle : 'Olá! Tenho interesse no produto ' + productTitle;
+
+            const sizeSelect = document.getElementById('size-select');
+            if (sizeSelect) {
+                const selectedLabel = sizeSelect.options[sizeSelect.selectedIndex].dataset.label;
+                text += ' - ' + selectedLabel;
+            }
+
+            text += '.\n\n';
+
+            const selectedAccessories = [];
+            const accessoryCheckboxes = document.querySelectorAll('input[name="accessory"]');
+            accessoryCheckboxes.forEach(cb => {
+                if (cb.checked) {
+                    selectedAccessories.push(cb.value);
+                }
+            });
+            if (selectedAccessories.length > 0) {
+                text += '*Acessórios*: ' + selectedAccessories.join(', ') + '.\n\n';
+            }
+
+            const total = calculateTotalPrice();
+            text += '*Preço total*: ' + formatPrice(total) + '.\n\n';
+
+            const selectedPayment = document.querySelector('input[name="payment"]:checked');
+            if (selectedPayment) {
+                text += '*Forma de pagamento*: ' + selectedPayment.value;
+                if (selectedPayment.value === 'cartão de crédito') {
+                    const installmentsSelect = document.querySelector('select[name="installments"]');
+                    if (installmentsSelect.value !== '1x') {
+                        text += ' (' + installmentsSelect.value + ')';
+                    }
+                }
+            }
+
+            const encoded = encodeURIComponent(text);
+            const url = 'https://wa.me/558199460014?text=' + encoded;
+            return url;
+        }
+
+        // Função para atualizar a imagem do produto
+        function updateImage() {
+            const eixoCheckbox = document.getElementById('eixo-adicional-checkbox');
+            const productImage = document.getElementById('product-image');
+
+            // Só trucar se eixo adicional estiver marcado
+            if (eixoCheckbox && eixoCheckbox.checked) {
+                productImage.src = productImage.dataset.trucadoSrc;
+            } else {
+                productImage.src = productImage.dataset.standardSrc;
+            }
+        }
+
+        // Função para atualizar o display do tamanho efetivo
+        function updateSizeDisplay() {
+            const sizeSelect = document.getElementById('size-select');
+            if (!sizeSelect || '{{ product.category }}' !== 'Reboque Padrão') {
+                return;
+            }
+
+            const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+            let displayText = selectedOption.dataset.label;
+
+            // Atualizar o texto da opção selecionada ou criar um display separado
+            const sizeDisplay = document.getElementById('size-display');
+            if (sizeDisplay) {
+                sizeDisplay.textContent = displayText;
+            }
+        }
+
+        // Função para atualizar as opções do select de tamanho baseado no eixo adicional
+        function updateSizeOptions() {
+            const sizeSelect = document.getElementById('size-select');
+            const eixoCheckbox = document.getElementById('eixo-adicional-checkbox');
+
+            if (!sizeSelect || '{{ product.category }}' !== 'Reboque Padrão') {
+                return;
+            }
+
+            // Armazenar opções originais se ainda não foram armazenadas
+            if (!sizeSelect.dataset.originalOptions) {
+                sizeSelect.dataset.originalOptions = JSON.stringify(Array.from(sizeSelect.options).map(option => ({
+                    value: option.value,
+                    label: option.dataset.label,
+                    text: option.text
+                })));
+            }
+
+            const originalOptions = JSON.parse(sizeSelect.dataset.originalOptions);
+            const isEixoChecked = eixoCheckbox && eixoCheckbox.checked;
+
+            // Limpar opções atuais
+            sizeSelect.innerHTML = '';
+
+            // Filtrar e modificar opções
+            originalOptions.forEach((optionData, index) => {
+                let shouldInclude = true;
+                let modifiedLabel = optionData.label;
+                let modifiedValue = optionData.value;
+
+                if (isEixoChecked) {
+                    // Remover opções de 1,50m e 1,80m
+                    if (optionData.label === 'C 1,50m x L 1,20m x A 0,50m' || 
+                        optionData.label === 'C 1,80m x L 1,20m x A 0,50m') {
+                        shouldInclude = false;
+                    } else {
+                        // Aumentar C em 0,20 para as restantes
+                        modifiedLabel = optionData.label.replace(/C (\d+,\d+)m/, function(match, comprimentoStr) {
+                            const comprimento = parseFloat(comprimentoStr.replace(',', '.'));
+                            const novoComprimento = comprimento + 0.2;
+                            return 'C ' + novoComprimento.toFixed(2).replace('.', ',') + 'm';
+                        });
+                    }
+                }
+
+                if (shouldInclude) {
+                    const option = document.createElement('option');
+                    option.value = modifiedValue;
+                    option.dataset.label = modifiedLabel;
+                    option.textContent = modifiedLabel + ' — ' + modifiedValue;
+                    sizeSelect.appendChild(option);
+                }
+            });
+
+            // Selecionar a primeira opção disponível
+            if (sizeSelect.options.length > 0) {
+                sizeSelect.selectedIndex = 0;
+                const priceElement = document.getElementById('product-price');
+                if (priceElement) {
+                    priceElement.textContent = sizeSelect.value;
+                }
+            }
+        }
+
+        // Função para mostrar/ocultar opções de parcelas
+        function toggleInstallments() {
+            const selectedPayment = document.querySelector('input[name="payment"]:checked');
+            const installmentsDiv = document.getElementById('installments-div');
+            if (selectedPayment && selectedPayment.value === 'cartão de crédito') {
+                installmentsDiv.style.display = 'block';
+            } else {
+                installmentsDiv.style.display = 'none';
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const sizeSelect = document.getElementById('size-select');
+            const priceElement = document.getElementById('product-price');
+            const accessoryCheckboxes = document.querySelectorAll('input[name="accessory"]');
+            const paymentRadios = document.querySelectorAll('input[name="payment"]');
+            const installmentsSelect = document.querySelector('select[name="installments"]');
+
+            if (sizeSelect) {
+                sizeSelect.addEventListener('change', function() {
+                    priceElement.textContent = this.value;
+                    updatePriceHud();
+                    updateImage(); // Atualizar imagem quando tamanho muda
+                    toggleEixoAdicional(); // Mostrar/esconder eixo adicional
+                    updateSizeDisplay(); // Atualizar display do tamanho
+                });
+            }
+
+            accessoryCheckboxes.forEach(cb => {
+                cb.addEventListener('change', function() {
+                    updatePriceHud();
+                    if (cb.id === 'eixo-adicional-checkbox') {
+                        updateSizeOptions(); // Atualizar opções do select
+                        updateImage();
+                        updateSizeDisplay(); // Atualizar display quando eixo muda
+                        toggleEixoAdicional(); // Verificar se deve mostrar o eixo
+                    }
+                });
+            });
+
+            paymentRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    toggleInstallments();
+                });
+            });
+
+            installmentsSelect.addEventListener('change', function() {});
+
+            // Inicialização
+            updatePriceHud();
+            toggleInstallments();
+            updateImage(); // Inicializar imagem
+            toggleEixoAdicional(); // Inicializar visibilidade do eixo
+            updateSizeDisplay(); // Inicializar display do tamanho
+            updateSizeOptions(); // Inicializar opções do select
+        });
+    </script>
+</body>
+</html>

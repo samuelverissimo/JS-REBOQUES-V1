@@ -1,0 +1,379 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.title }} - JS REBOQUES</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        header {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 360px;
+            height: auto;
+            max-width: 100%;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            color: #cccccc;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        nav a:hover {
+            color: #ffffff;
+        }
+        .product-detail {
+            padding: 40px 20px;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .product-detail img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+        .product-detail h1 {
+            font-size: 2.5em;
+            margin: 20px 0;
+        }
+        .product-detail label,
+        .product-detail select,
+        .product-detail .accessory-row {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin: 0 auto 16px auto;
+        }
+        .product-detail label {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .product-detail select {
+            width: 100%;
+            max-width: 420px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #000;
+            font-size: 1em;
+        }
+        .price {
+            font-weight: bold;
+            color: #000;
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        .product-detail p,
+        .product-detail ul {
+            color: #666;
+            line-height: 1.6;
+            text-align: left;
+            margin: 16px 0;
+            font-size: 1em;
+            max-width: 780px;
+        }
+        .product-detail ul {
+            padding-left: 24px;
+        }
+        .product-detail ul li {
+            margin-bottom: 10px;
+        }
+        .accessories-list {
+            border: 1px solid #ddd;
+            padding: 18px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            max-width: 780px;
+            margin: 0 auto 20px auto;
+        }
+        .accessory-row {
+            margin-bottom: 12px;
+        }
+        .accessory-row label {
+            cursor: pointer;
+            font-weight: normal;
+        }
+        .accessory-row input {
+            margin-right: 10px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #000;
+            color: #fff;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-size: 1.1em;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #333;
+        }
+        .price-hud {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #000;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            z-index: 1000;
+        }
+        .payment-options {
+            border: 1px solid #ddd;
+            padding: 18px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            max-width: 780px;
+            margin: 0 auto 20px auto;
+        }
+        .payment-options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .payment-options input[type="radio"] {
+            margin-right: 10px;
+        }
+        .installments {
+            margin-left: 20px;
+            display: none;
+        }
+        footer {
+            background-color: #000000;
+            color: #cccccc;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{% static 'logos/logo-js.png' %}" alt="JS REBOQUES Logo" class="logo">
+        <nav>
+            <a href="{% url 'home:home' %}">Home</a>
+            <a href="#">Sobre Nós</a>
+            <a href="https://wa.me/c/558199460014">Contato</a>
+        </nav>
+    </header>
+    <section class="product-detail">
+        <img id="product-image" src="{% static product.image %}" alt="{{ product.title }}" data-standard-src="{% static product.image %}" data-trucado-src="{% static product.trucado_image|default:product.image %}">
+        <h1>{{ product.title }}</h1>
+        {% if product.sizes %}
+        <label for="size-select">Selecione o tamanho</label>
+        <select id="size-select">
+            {% for size in product.sizes %}
+            <option value="{{ size.price }}" data-label="{{ size.label }}">{{ size.label }} — {{ size.price }}</option>
+            {% endfor %}
+        </select>
+        <p class="price" id="product-price">{{ product.sizes.0.price }}</p>
+        {% else %}
+        <p class="price" id="product-price">{{ product.price }}</p>
+        {% endif %}
+        <p>{{ product.short_description }}</p>
+        <p><strong>Categoria:</strong> {{ product.category }}</p>
+        <div class="description">
+            <p><strong>Detalhes do produto:</strong></p>
+            <ul>
+                {% for detail in product.details %}
+                <li>{{ detail }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="accessories-list">
+            <p><strong>Acessórios</strong></p>
+            {% for accessory in accessories %}
+                {% if accessory.name != 'Eixo adicional' or product.category == 'Reboque Padrão' %}
+                <div class="accessory-row">
+                    <label>
+                        <input type="checkbox" name="accessory" value="{{ accessory.name }}" data-price="{{ accessory.price }}" {% if accessory.name == 'Eixo adicional' %}id="eixo-adicional-checkbox"{% endif %}>
+                        {{ accessory.name }} — {{ accessory.price }}<br>
+                        <small>{{ accessory.description }}</small>
+                    </label>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="payment-options">
+            <p><strong>Forma de Pagamento</strong></p>
+            <label>
+                <input type="radio" name="payment" value="em espécie">
+                Em espécie
+            </label>
+            <label>
+                <input type="radio" name="payment" value="à vista (débito)">
+                À vista (débito)
+            </label>
+            <label>
+                <input type="radio" name="payment" value="pix">
+                PIX
+            </label>
+            <label>
+                <input type="radio" name="payment" value="cartão de crédito">
+                Cartão de crédito
+                <div class="installments">
+                    <label>Parcelas:
+                        <select name="installments">
+                            <option value="1x">1x</option>
+                            <option value="2x">2x</option>
+                            <option value="3x">3x</option>
+                            <option value="4x">4x</option>
+                            <option value="5x">5x</option>
+                            <option value="6x">6x</option>
+                            <option value="7x">7x</option>
+                            <option value="8x">8x</option>
+                            <option value="9x">9x</option>
+                            <option value="10x">10x</option>
+                            <option value="11x">11x</option>
+                            <option value="12x">12x</option>
+                        </select>
+                    </label>
+                </div>
+            </label>
+        </div>
+        <a id="contact-button" href="{{ contact_url }}" class="btn">Tenho Interesse</a>
+    </section>
+    <div class="price-hud" id="price-hud">Preço Total: R$ 0,00</div>
+    <footer>
+        <p>&copy; 2026 JS REBOQUES. Todos os direitos reservados.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const priceElement = document.getElementById('product-price');
+            const priceHud = document.getElementById('price-hud');
+            const sizeSelect = document.getElementById('size-select');
+            const contactButton = document.getElementById('contact-button');
+            const productImage = document.getElementById('product-image');
+            const eixoCheckbox = document.getElementById('eixo-adicional-checkbox');
+            const productTitle = '{{ product.title|escapejs }}';
+            const baseText = 'Olá, tenho interesse no produto ' + productTitle;
+            const accessoryCheckboxes = document.querySelectorAll('input[name="accessory"]');
+            const paymentRadios = document.querySelectorAll('input[name="payment"]');
+            const installmentsSelect = document.querySelector('select[name="installments"]');
+            const installmentsDiv = document.querySelector('.installments');
+
+            function parsePrice(priceStr) {
+                return parseFloat(priceStr.replace('R$ ', '').replace('.', '').replace(',', '.'));
+            }
+
+            function formatPrice(price) {
+                return 'R$ ' + price.toFixed(2).replace('.', ',');
+            }
+
+            function calculateTotalPrice() {
+                let total = 0;
+                if (sizeSelect) {
+                    total += parsePrice(sizeSelect.value);
+                } else {
+                    total += parsePrice('{{ product.price }}');
+                }
+                accessoryCheckboxes.forEach(cb => {
+                    if (cb.checked) {
+                        total += parsePrice(cb.dataset.price);
+                    }
+                });
+                return total;
+            }
+
+            function updatePriceHud() {
+                const total = calculateTotalPrice();
+                priceHud.textContent = 'Preço Total: ' + formatPrice(total);
+            }
+
+            function updateContactUrl() {
+                let text = baseText;
+                if (sizeSelect) {
+                    const selectedLabel = sizeSelect.options[sizeSelect.selectedIndex].dataset.label;
+                    text += ' - ' + selectedLabel;
+                }
+                const selectedAccessories = [];
+                accessoryCheckboxes.forEach(cb => {
+                    if (cb.checked) {
+                        selectedAccessories.push(cb.value);
+                    }
+                });
+                if (selectedAccessories.length > 0) {
+                    text += '. Acessórios: ' + selectedAccessories.join(', ');
+                }
+                const total = calculateTotalPrice();
+                text += '. Preço total: ' + formatPrice(total);
+                const selectedPayment = document.querySelector('input[name="payment"]:checked');
+                if (selectedPayment) {
+                    text += '. Forma de pagamento: ' + selectedPayment.value;
+                    if (selectedPayment.value === 'cartão de crédito' && installmentsSelect.value !== '1x') {
+                        text += ' (' + installmentsSelect.value + ')';
+                    }
+                }
+                const encoded = encodeURIComponent(text);
+                contactButton.href = 'https://wa.me/558199460014?text=' + encoded;
+            }
+
+            function updateImage() {
+                if (eixoCheckbox && eixoCheckbox.checked) {
+                    productImage.src = productImage.dataset.trucadoSrc;
+                } else {
+                    productImage.src = productImage.dataset.standardSrc;
+                }
+            }
+
+            function toggleInstallments() {
+                const selectedPayment = document.querySelector('input[name="payment"]:checked');
+                if (selectedPayment && selectedPayment.value === 'cartão de crédito') {
+                    installmentsDiv.style.display = 'block';
+                } else {
+                    installmentsDiv.style.display = 'none';
+                }
+            }
+
+            if (sizeSelect) {
+                sizeSelect.addEventListener('change', function() {
+                    priceElement.textContent = this.value;
+                    updatePriceHud();
+                    updateContactUrl();
+                });
+            }
+
+            accessoryCheckboxes.forEach(cb => {
+                cb.addEventListener('change', function() {
+                    updatePriceHud();
+                    updateContactUrl();
+                    if (cb.id === 'eixo-adicional-checkbox') {
+                        updateImage();
+                    }
+                });
+            });
+
+            paymentRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    toggleInstallments();
+                    updateContactUrl();
+                });
+            });
+
+            installmentsSelect.addEventListener('change', updateContactUrl);
+
+            updatePriceHud();
+            updateContactUrl();
+            toggleInstallments();
+        });
+    </script>
+</body>
+</html>
