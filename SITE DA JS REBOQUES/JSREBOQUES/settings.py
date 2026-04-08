@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-39wc^%m%f=f%t#%(@3suyx^94a&tfqr8$5e_=2-k3oj$c99+@#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.onrender.com']
+ALLOWED_HOSTS = [
+    'jsreboques.com.br',
+    'www.jsreboques.com.br',
+    'js-reboques.onrender.com'
+    '.onrender.com',
+]
 
 
 # Application definition
