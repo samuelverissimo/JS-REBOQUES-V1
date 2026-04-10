@@ -152,7 +152,7 @@ PRODUCTS = [
 ]
 
 ACCESSORIES = [
-    {'name': 'Estepe aro 13', 'price': 'R$ 499', 'description': 'Roda sobressalente para uso emergencial.'},
+    {'name': 'Estepe aro 13', 'price': 'R$ 699', 'description': 'Roda sobressalente para uso emergencial.'},
     {'name': 'Estepe aro 14', 'price': 'R$ 849', 'description': 'Roda sobressalente para rodas aro 14.'},
     {'name': 'Baú pequeno', 'price': 'R$ 800', 'description': 'Baú compacto para guardar ferramentas e itens leves.'},
     {'name': 'Baú médio', 'price': 'R$ 1.500', 'description': 'Baú de tamanho médio com boa capacidade de carga.'},
